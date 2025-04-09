@@ -263,7 +263,7 @@
                 giftCodeInput.value = giftCode;
                 
                 // Bước 2: Tự động gửi gift code
-                const scriptUrl = 'https://script.google.com/macros/s/AKfycbz0QaWU57qAN7Tkoi0qQ8FdwU3vBWZF814YDjZG_YQ_Tfc6v_AM66LOok7FYU4m6Yh4jQ/exec';
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbx_F5x4hdWKjrQH73BAoZfcKhx52kjsobMzgl5-EP8puLuAkrNAHKO0DkDgf8o4Ibr8/exec';
                 
                 await fetch(scriptUrl, {
                     method: 'POST',
@@ -331,7 +331,7 @@
             loadingDiv.style.display = 'block';
             document.getElementById('accountDisplay').style.display = 'none';
             
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbz0QaWU57qAN7Tkoi0qQ8FdwU3vBWZF814YDjZG_YQ_Tfc6v_AM66LOok7FYU4m6Yh4jQ/exec?action=getAccount&_=' + new Date().getTime();
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbx_F5x4hdWKjrQH73BAoZfcKhx52kjsobMzgl5-EP8puLuAkrNAHKO0DkDgf8o4Ibr8/exec?action=getAccount&_=' + new Date().getTime();
             
             fetch(scriptUrl)
             .then(response => response.json())
@@ -371,7 +371,7 @@
             errorDiv.style.display = 'none';
             loadingDiv.style.display = 'block';
             
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbz0QaWU57qAN7Tkoi0qQ8FdwU3vBWZF814YDjZG_YQ_Tfc6v_AM66LOok7FYU4m6Yh4jQ/exec?action=markUsed&row=' + currentAccount.row + '&_=' + new Date().getTime();
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbx_F5x4hdWKjrQH73BAoZfcKhx52kjsobMzgl5-EP8puLuAkrNAHKO0DkDgf8o4Ibr8/exec?action=markUsed&row=' + currentAccount.row + '&_=' + new Date().getTime();
             
             fetch(scriptUrl)
             .then(response => response.json())
