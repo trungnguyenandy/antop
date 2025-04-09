@@ -13,6 +13,7 @@
             --light-gray: #f5f5f5;
             --dark-gray: #333;
             --tab-height: 50px;
+            --header-height: 60px;
         }
         
         * {
@@ -23,24 +24,41 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f9f9f9;
             color: var(--dark-gray);
             line-height: 1.6;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            overflow-x: hidden;
             touch-action: manipulation;
         }
         
+        /* Sticky Header */
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-title {
+            text-align: center;
+            padding: 15px;
+            font-size: 1.3em;
+            color: var(--primary-color);
+            font-weight: 600;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        /* Sticky Navigation */
         .tab-container {
             display: flex;
             height: var(--tab-height);
             background-color: white;
+            position: sticky;
+            top: var(--header-height);
+            z-index: 999;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 10;
         }
         
         .tab {
@@ -48,10 +66,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0 10px;
             font-weight: 500;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s ease-out;
+            transition: all 0.2s;
             border-bottom: 3px solid transparent;
             user-select: none;
             -webkit-user-select: none;
@@ -62,21 +80,15 @@
             color: var(--primary-color);
         }
         
+        /* Main Content */
         .content-container {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
+            height: calc(100vh - var(--header-height) - var(--tab-height));
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             padding: 15px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
             display: none;
         }
         
@@ -84,23 +96,10 @@
             display: block;
         }
         
-        /* Styles for Tab 1 (Quản lý) */
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-color);
-        }
-        
-        .header h1 {
-            color: var(--primary-color);
-            margin-bottom: 5px;
-            font-size: 1.5em;
-        }
-        
+        /* Common Styles */
         .container {
             background-color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             margin-bottom: 15px;
@@ -115,88 +114,60 @@
         
         .input-group {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-bottom: 15px;
-            align-items: center;
-            flex-wrap: wrap;
         }
         
         input {
-            padding: 12px;
+            padding: 12px 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            flex-grow: 1;
             font-size: 15px;
-            transition: border 0.3s;
-            display: none;
+            width: 100%;
             -webkit-appearance: none;
         }
         
         button {
-            padding: 12px 16px;
+            padding: 12px 15px;
             color: white;
             border: none;
             border-radius: 8px;
-            cursor: pointer;
-            white-space: nowrap;
             font-weight: 500;
             font-size: 15px;
-            transition: all 0.2s ease-out;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-appearance: none;
-            background-clip: padding-box;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
         }
         
         button:active {
-            transform: scale(0.96);
+            transform: scale(0.98);
         }
         
         button:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             transform: none !important;
-        }
-        
-        .button-loading::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .button-loading::before {
-            content: "";
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: button-spin 0.8s linear infinite;
-            margin-right: 8px;
-        }
-        
-        @keyframes button-spin {
-            to { transform: rotate(360deg); }
         }
         
         #pasteAndSubmitBtn {
             background-color: var(--warning-color);
-            min-width: 160px;
         }
         
         #iosSubmitBtn {
             background-color: var(--primary-color);
             display: none;
+        }
+        
+        .copy-btn {
+            background-color: var(--secondary-color);
+        }
+        
+        .mark-used-btn {
+            background-color: var(--danger-color);
         }
         
         .message {
@@ -207,29 +178,19 @@
             font-size: 14px;
         }
         
-        #message, #accountMessage {
+        .success-message {
             background-color: #e6f4ea;
             color: var(--secondary-color);
             border-left: 4px solid var(--secondary-color);
         }
         
-        #error, #accountError {
+        .error-message {
             background-color: #fce8e6;
             color: var(--danger-color);
             border-left: 4px solid var(--danger-color);
         }
         
-        /* Styles for Tab 2 (Video 60P) */
-        .iframe-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        /* Styles for Tab 3 (Tài khoản) */
+        /* Account Tab Styles */
         .account-display {
             display: flex;
             flex-direction: column;
@@ -238,7 +199,6 @@
         }
         
         .account-field {
-            text-align: left;
             padding: 12px;
             background: var(--light-gray);
             border-radius: 6px;
@@ -251,18 +211,10 @@
             color: var(--dark-gray);
         }
         
-        .copy-btn {
-            background-color: var(--secondary-color);
-        }
-        
-        .mark-used-btn {
-            background-color: var(--danger-color);
-        }
-        
         .loading {
             display: none;
             text-align: center;
-            margin: 10px 0;
+            margin: 15px 0;
         }
         
         .loading-spinner {
@@ -291,7 +243,6 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             display: none;
             z-index: 1000;
-            font-size: 14px;
             animation: fadeIn 0.3s ease-out;
         }
         
@@ -299,35 +250,46 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* Video Tab Styles */
+        .iframe-container {
+            width: 100%;
+            height: 300px;
+            border: none;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
-    <div class="tab-container">
-        <div class="tab active" data-tab="management">Quản lý</div>
-        <div class="tab" data-tab="video">Video 60P</div>
-        <div class="tab" data-tab="account">Tài khoản</div>
+    <!-- Sticky Header -->
+    <div class="app-header">
+        <div class="header-title">Tiktok Lite Manager</div>
+        
+        <!-- Sticky Navigation -->
+        <div class="tab-container">
+            <div class="tab active" data-tab="management">Quản lý</div>
+            <div class="tab" data-tab="video">Video 60P</div>
+            <div class="tab" data-tab="account">Tài khoản</div>
+        </div>
     </div>
     
+    <!-- Main Content -->
     <div class="content-container">
         <!-- Tab 1: Quản lý -->
         <div class="content active" id="management">
-            <div class="header">
-                <h1>Tiktok Lite</h1>
-            </div>
-
             <div class="container">
-                <h4 class="section-title">Bấm Để Thêm Gift Mới</h4>
+                <h2 class="section-title">Thêm Gift Code</h2>
                 <div class="input-group">
+                    <input type="text" id="giftCode" placeholder="Nhập mã gift...">
                     <button id="pasteAndSubmitBtn">
                         <span>➡️</span> Dán và gửi Gift
                     </button>
-                    <input type="text" id="giftCode" placeholder="Mã gift...">
                     <button id="iosSubmitBtn">
                         <span>📤</span> Gửi Gift
                     </button>
                 </div>
-                <div id="message" class="message"></div>
-                <div id="error" class="message"></div>
+                <div id="giftMessage" class="message"></div>
+                <div id="giftError" class="message"></div>
                 <div class="loading" id="giftLoading">
                     <div class="loading-spinner"></div>
                     <p>Đang xử lý...</p>
@@ -337,17 +299,17 @@
         
         <!-- Tab 2: Video 60P -->
         <div class="content" id="video">
-            <iframe class="iframe-container" src="https://giau.mobi/" frameborder="0" allowfullscreen></iframe>
+            <div class="container">
+                <h2 class="section-title">Video 60P</h2>
+                <iframe class="iframe-container" src="https://giau.mobi/" frameborder="0" allowfullscreen></iframe>
+            </div>
         </div>
         
         <!-- Tab 3: Tài khoản -->
         <div class="content" id="account">
-            <div class="header">
-                <h1>Quản lý Tài khoản</h1>
-            </div>
-            
             <div class="container">
-                <button id="getAccountBtn" style="margin-bottom: 15px;">
+                <h2 class="section-title">Quản lý Tài khoản</h2>
+                <button id="getAccountBtn">
                     <span>🔍</span> Lấy Tài khoản Khả dụng
                 </button>
                 
@@ -380,13 +342,13 @@
                     </button>
                 </div>
                 
-                <div id="accountMessage" class="message"></div>
-                <div id="accountError" class="message"></div>
+                <div id="accountMessage" class="message success-message"></div>
+                <div id="accountError" class="message error-message"></div>
             </div>
-            
-            <div id="copyNotification" class="copy-notification"></div>
         </div>
     </div>
+
+    <div id="copyNotification" class="copy-notification"></div>
 
     <script>
         // Biến toàn cục
@@ -432,7 +394,7 @@
                 handleSubmitGiftManually();
             });
             
-            // Account buttons (Tab 3)
+            // Account buttons
             document.getElementById('getAccountBtn').addEventListener(isIOS ? 'touchend' : 'click', function(e) {
                 if (isIOS) e.preventDefault();
                 handleGetAvailableAccount();
@@ -472,28 +434,27 @@
             clickedTab.classList.add('active');
             const tabId = clickedTab.getAttribute('data-tab');
             document.getElementById(tabId).classList.add('active');
+            
+            // Scroll to top khi chuyển tab
+            document.querySelector('.content-container').scrollTop = 0;
         }
         
-        // ========== GIFT CODE FUNCTIONS (Tab 1) ==========
+        // ========== GIFT CODE FUNCTIONS ==========
         async function handlePasteAndSubmitGift() {
             if (isProcessing) return;
             isProcessing = true;
             
             const button = document.getElementById('pasteAndSubmitBtn');
             button.disabled = true;
-            button.classList.add('button-loading');
             
             try {
                 await pasteAndSubmitGift();
             } catch (error) {
                 console.error('Error:', error);
-                showMessage('Lỗi khi xử lý gift code', 'error', 'message', 'error');
+                showMessage('Lỗi khi xử lý gift code', 'error', 'giftError');
             } finally {
-                setTimeout(() => {
-                    button.disabled = false;
-                    button.classList.remove('button-loading');
-                    isProcessing = false;
-                }, 300);
+                button.disabled = false;
+                isProcessing = false;
             }
         }
         
@@ -502,8 +463,8 @@
             const loadingDiv = document.getElementById('giftLoading');
             
             // Reset UI
-            hideMessage('message');
-            hideMessage('error');
+            hideMessage('giftMessage');
+            hideMessage('giftError');
             loadingDiv.style.display = 'block';
             
             try {
@@ -523,10 +484,10 @@
                 giftCodeInput.value = giftCode;
                 await submitGiftCode(giftCode);
                 
-                showMessage('Đã dán và gửi gift code thành công!', 'success', 'message');
+                showMessage('Đã dán và gửi gift code thành công!', 'success', 'giftMessage');
                 giftCodeInput.value = '';
             } catch (err) {
-                showMessage(err.message || 'Lỗi khi dán và gửi gift code', 'error', 'error');
+                showMessage(err.message || 'Lỗi khi dán và gửi gift code', 'error', 'giftError');
                 giftCodeInput.style.display = 'block';
                 giftCodeInput.focus();
             } finally {
@@ -540,20 +501,16 @@
             
             const button = document.getElementById('iosSubmitBtn');
             button.disabled = true;
-            button.classList.add('button-loading');
             
             try {
                 await delay(50);
                 await submitGiftManually();
             } catch (error) {
                 console.error('Error:', error);
-                showMessage('Lỗi khi gửi gift code', 'error', 'error');
+                showMessage('Lỗi khi gửi gift code', 'error', 'giftError');
             } finally {
-                setTimeout(() => {
-                    button.disabled = false;
-                    button.classList.remove('button-loading');
-                    isProcessing = false;
-                }, 300);
+                button.disabled = false;
+                isProcessing = false;
             }
         }
         
@@ -565,13 +522,13 @@
                 throw new Error('Vui lòng nhập hoặc dán mã gift trước khi gửi');
             }
             
-            hideMessage('message');
-            hideMessage('error');
+            hideMessage('giftMessage');
+            hideMessage('giftError');
             loadingDiv.style.display = 'block';
             
             try {
                 await submitGiftCode(giftCode);
-                showMessage('Đã gửi gift code thành công!', 'success', 'message');
+                showMessage('Đã gửi gift code thành công!', 'success', 'giftMessage');
                 document.getElementById('giftCode').value = '';
             } finally {
                 loadingDiv.style.display = 'none';
@@ -591,14 +548,13 @@
             });
         }
         
-        // ========== ACCOUNT FUNCTIONS (Tab 3) ==========
+        // ========== ACCOUNT FUNCTIONS ==========
         async function handleGetAvailableAccount() {
             if (isProcessing) return;
             isProcessing = true;
             
             const button = document.getElementById('getAccountBtn');
             button.disabled = true;
-            button.classList.add('button-loading');
             
             try {
                 await delay(50);
@@ -607,11 +563,8 @@
                 console.error('Error:', error);
                 showMessage('Lỗi khi tải tài khoản', 'error', 'accountError');
             } finally {
-                setTimeout(() => {
-                    button.disabled = false;
-                    button.classList.remove('button-loading');
-                    isProcessing = false;
-                }, 300);
+                button.disabled = false;
+                isProcessing = false;
             }
         }
         
@@ -653,7 +606,6 @@
             
             const button = document.getElementById(`copy${elementId.replace('Display', '')}Btn`);
             button.disabled = true;
-            button.classList.add('button-loading');
             
             try {
                 await delay(50);
@@ -668,7 +620,6 @@
             } finally {
                 setTimeout(() => {
                     button.disabled = false;
-                    button.classList.remove('button-loading');
                     isProcessing = false;
                 }, 300);
             }
@@ -691,7 +642,6 @@
             
             const button = document.getElementById('markUsedBtn');
             button.disabled = true;
-            button.classList.add('button-loading');
             
             try {
                 await delay(50);
@@ -702,7 +652,6 @@
             } finally {
                 setTimeout(() => {
                     button.disabled = false;
-                    button.classList.remove('button-loading');
                     isProcessing = false;
                 }, 300);
             }
@@ -737,9 +686,9 @@
         
         // ========== HELPER FUNCTIONS ==========
         function showMessage(message, type, elementId) {
-            hideMessage(elementId === 'message' ? 'error' : 'accountError');
             const element = document.getElementById(elementId);
             element.textContent = message;
+            element.className = 'message ' + (type === 'success' ? 'success-message' : 'error-message');
             element.style.display = 'block';
         }
         
