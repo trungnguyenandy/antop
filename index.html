@@ -164,7 +164,6 @@
 </head>
 <body>
     <div class="header">
-        <h1>Toptop by Trung Nguyen</h1>
         <p>Công cụ quản lý gift code và tài khoản</p>
     </div>
 
@@ -172,9 +171,9 @@
     <div class="container">
         <h2 class="section-title">Thêm Gift Mới</h2>
         <div class="input-group">
-            <input type="text" id="giftCode" placeholder="Nhập mã gift...">
-            <button id="pasteAndSubmitBtn" onclick="pasteAndSubmitGift()">
-                <span>📋➡️🎁</span> Dán và gửi Gift
+          <button id="pasteAndSubmitBtn" onclick="pasteAndSubmitGift()">
+                <span>➡️</span> Dán và gửi Gift
+                <input type="text" id="giftCode" placeholder="Nhập mã gift...">
             </button>
         </div>
         <div id="message" class="message"></div>
@@ -261,7 +260,7 @@
                 giftCodeInput.value = giftCode;
                 
                 // Bước 2: Tự động gửi gift code
-                const scriptUrl = 'https://script.google.com/macros/s/AKfycbz0QaWU57qAN7Tkoi0qQ8FdwU3vBWZF814YDjZG_YQ_Tfc6v_AM66LOok7FYU4m6Yh4jQ/exec';
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbx_F5x4hdWKjrQH73BAoZfcKhx52kjsobMzgl5-EP8puLuAkrNAHKO0DkDgf8o4Ibr8/exec';
                 
                 await fetch(scriptUrl, {
                     method: 'POST',
@@ -329,7 +328,7 @@
             loadingDiv.style.display = 'block';
             document.getElementById('accountDisplay').style.display = 'none';
             
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbz0QaWU57qAN7Tkoi0qQ8FdwU3vBWZF814YDjZG_YQ_Tfc6v_AM66LOok7FYU4m6Yh4jQ/exec?action=getAccount&_=' + new Date().getTime();
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbx_F5x4hdWKjrQH73BAoZfcKhx52kjsobMzgl5-EP8puLuAkrNAHKO0DkDgf8o4Ibr8/exec?action=getAccount&_=' + new Date().getTime();
             
             fetch(scriptUrl)
             .then(response => response.json())
@@ -369,7 +368,7 @@
             errorDiv.style.display = 'none';
             loadingDiv.style.display = 'block';
             
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbz0QaWU57qAN7Tkoi0qQ8FdwU3vBWZF814YDjZG_YQ_Tfc6v_AM66LOok7FYU4m6Yh4jQ/exec?action=markUsed&row=' + currentAccount.row + '&_=' + new Date().getTime();
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbx_F5x4hdWKjrQH73BAoZfcKhx52kjsobMzgl5-EP8puLuAkrNAHKO0DkDgf8o4Ibr8/exec?action=markUsed&row=' + currentAccount.row + '&_=' + new Date().getTime();
             
             fetch(scriptUrl)
             .then(response => response.json())
