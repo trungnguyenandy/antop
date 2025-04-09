@@ -199,14 +199,6 @@
             display: none;
         }
         
-        .copy-btn {
-            background-color: var(--secondary-color);
-        }
-        
-        .mark-used-btn {
-            background-color: var(--danger-color);
-        }
-        
         .message {
             margin-top: 15px;
             padding: 12px;
@@ -227,6 +219,17 @@
             border-left: 4px solid var(--danger-color);
         }
         
+        /* Styles for Tab 2 (Video 60P) */
+        .iframe-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Styles for Tab 3 (Tài khoản) */
         .account-display {
             display: flex;
             flex-direction: column;
@@ -246,6 +249,14 @@
         
         .account-field strong {
             color: var(--dark-gray);
+        }
+        
+        .copy-btn {
+            background-color: var(--secondary-color);
+        }
+        
+        .mark-used-btn {
+            background-color: var(--danger-color);
         }
         
         .loading {
@@ -288,22 +299,13 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        /* Styles for Tab 2 (Video 60P) */
-        .iframe-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
     </style>
 </head>
 <body>
     <div class="tab-container">
         <div class="tab active" data-tab="management">Quản lý</div>
         <div class="tab" data-tab="video">Video 60P</div>
+        <div class="tab" data-tab="account">Tài khoản</div>
     </div>
     
     <div class="content-container">
@@ -331,9 +333,20 @@
                     <p>Đang xử lý...</p>
                 </div>
             </div>
-
+        </div>
+        
+        <!-- Tab 2: Video 60P -->
+        <div class="content" id="video">
+            <iframe class="iframe-container" src="https://giau.mobi/" frameborder="0" allowfullscreen></iframe>
+        </div>
+        
+        <!-- Tab 3: Tài khoản -->
+        <div class="content" id="account">
+            <div class="header">
+                <h1>Quản lý Tài khoản</h1>
+            </div>
+            
             <div class="container">
-                <h2 class="section-title">Quản lý Tài khoản</h2>
                 <button id="getAccountBtn" style="margin-bottom: 15px;">
                     <span>🔍</span> Lấy Tài khoản Khả dụng
                 </button>
@@ -370,13 +383,8 @@
                 <div id="accountMessage" class="message"></div>
                 <div id="accountError" class="message"></div>
             </div>
-
+            
             <div id="copyNotification" class="copy-notification"></div>
-        </div>
-        
-        <!-- Tab 2: Video 60P -->
-        <div class="content" id="video">
-            <iframe class="iframe-container" src="https://giau.mobi/" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -424,7 +432,7 @@
                 handleSubmitGiftManually();
             });
             
-            // Account buttons
+            // Account buttons (Tab 3)
             document.getElementById('getAccountBtn').addEventListener(isIOS ? 'touchend' : 'click', function(e) {
                 if (isIOS) e.preventDefault();
                 handleGetAvailableAccount();
@@ -466,7 +474,7 @@
             document.getElementById(tabId).classList.add('active');
         }
         
-        // ========== GIFT CODE FUNCTIONS ==========
+        // ========== GIFT CODE FUNCTIONS (Tab 1) ==========
         async function handlePasteAndSubmitGift() {
             if (isProcessing) return;
             isProcessing = true;
@@ -479,7 +487,7 @@
                 await pasteAndSubmitGift();
             } catch (error) {
                 console.error('Error:', error);
-                showMessage('Lỗi khi xử lý gift code', 'error');
+                showMessage('Lỗi khi xử lý gift code', 'error', 'message', 'error');
             } finally {
                 setTimeout(() => {
                     button.disabled = false;
@@ -494,7 +502,8 @@
             const loadingDiv = document.getElementById('giftLoading');
             
             // Reset UI
-            hideAllMessages();
+            hideMessage('message');
+            hideMessage('error');
             loadingDiv.style.display = 'block';
             
             try {
@@ -514,10 +523,10 @@
                 giftCodeInput.value = giftCode;
                 await submitGiftCode(giftCode);
                 
-                showMessage('Đã dán và gửi gift code thành công!', 'success');
+                showMessage('Đã dán và gửi gift code thành công!', 'success', 'message');
                 giftCodeInput.value = '';
             } catch (err) {
-                showMessage(err.message || 'Lỗi khi dán và gửi gift code', 'error');
+                showMessage(err.message || 'Lỗi khi dán và gửi gift code', 'error', 'error');
                 giftCodeInput.style.display = 'block';
                 giftCodeInput.focus();
             } finally {
@@ -538,7 +547,7 @@
                 await submitGiftManually();
             } catch (error) {
                 console.error('Error:', error);
-                showMessage('Lỗi khi gửi gift code', 'error');
+                showMessage('Lỗi khi gửi gift code', 'error', 'error');
             } finally {
                 setTimeout(() => {
                     button.disabled = false;
@@ -556,12 +565,13 @@
                 throw new Error('Vui lòng nhập hoặc dán mã gift trước khi gửi');
             }
             
-            hideAllMessages();
+            hideMessage('message');
+            hideMessage('error');
             loadingDiv.style.display = 'block';
             
             try {
                 await submitGiftCode(giftCode);
-                showMessage('Đã gửi gift code thành công!', 'success');
+                showMessage('Đã gửi gift code thành công!', 'success', 'message');
                 document.getElementById('giftCode').value = '';
             } finally {
                 loadingDiv.style.display = 'none';
@@ -581,7 +591,7 @@
             });
         }
         
-        // ========== ACCOUNT FUNCTIONS ==========
+        // ========== ACCOUNT FUNCTIONS (Tab 3) ==========
         async function handleGetAvailableAccount() {
             if (isProcessing) return;
             isProcessing = true;
@@ -595,7 +605,7 @@
                 await getAvailableAccount();
             } catch (error) {
                 console.error('Error:', error);
-                showAccountMessage('Lỗi khi tải tài khoản', 'error');
+                showMessage('Lỗi khi tải tài khoản', 'error', 'accountError');
             } finally {
                 setTimeout(() => {
                     button.disabled = false;
@@ -609,7 +619,8 @@
             const loadingDiv = document.getElementById('accountLoading');
             const accountDisplay = document.getElementById('accountDisplay');
             
-            hideAllAccountMessages();
+            hideMessage('accountMessage');
+            hideMessage('accountError');
             loadingDiv.style.display = 'block';
             accountDisplay.style.display = 'none';
             
@@ -625,7 +636,7 @@
                     document.getElementById('passwordDisplay').textContent = currentAccount.password;
                     accountDisplay.style.display = 'block';
                     
-                    showAccountMessage('Đã tìm thấy tài khoản khả dụng', 'success');
+                    showMessage('Đã tìm thấy tài khoản khả dụng', 'success', 'accountMessage');
                 } else {
                     throw new Error(data.message || 'Không có tài khoản khả dụng');
                 }
@@ -687,7 +698,7 @@
                 await markAsUsed();
             } catch (error) {
                 console.error('Error:', error);
-                showAccountMessage('Lỗi khi đánh dấu tài khoản', 'error');
+                showMessage('Lỗi khi đánh dấu tài khoản', 'error', 'accountError');
             } finally {
                 setTimeout(() => {
                     button.disabled = false;
@@ -701,7 +712,7 @@
             const loadingDiv = document.getElementById('accountLoading');
             const accountDisplay = document.getElementById('accountDisplay');
             
-            showAccountMessage('Đang cập nhật trạng thái...', 'success');
+            showMessage('Đang cập nhật trạng thái...', 'success', 'accountMessage');
             loadingDiv.style.display = 'block';
             
             try {
@@ -711,7 +722,7 @@
                 const data = await response.json();
                 
                 if (data.status === 'success') {
-                    showAccountMessage('Đã đánh dấu tài khoản đã sử dụng', 'success');
+                    showMessage('Đã đánh dấu tài khoản đã sử dụng', 'success', 'accountMessage');
                     accountDisplay.style.display = 'none';
                     currentAccount = null;
                 } else {
@@ -725,30 +736,15 @@
         }
         
         // ========== HELPER FUNCTIONS ==========
-        function showMessage(message, type) {
-            hideAllMessages();
-            const elementId = type === 'success' ? 'message' : 'error';
+        function showMessage(message, type, elementId) {
+            hideMessage(elementId === 'message' ? 'error' : 'accountError');
             const element = document.getElementById(elementId);
             element.textContent = message;
             element.style.display = 'block';
         }
         
-        function hideAllMessages() {
-            document.getElementById('message').style.display = 'none';
-            document.getElementById('error').style.display = 'none';
-        }
-        
-        function showAccountMessage(message, type) {
-            hideAllAccountMessages();
-            const elementId = type === 'success' ? 'accountMessage' : 'accountError';
-            const element = document.getElementById(elementId);
-            element.textContent = message;
-            element.style.display = 'block';
-        }
-        
-        function hideAllAccountMessages() {
-            document.getElementById('accountMessage').style.display = 'none';
-            document.getElementById('accountError').style.display = 'none';
+        function hideMessage(elementId) {
+            document.getElementById(elementId).style.display = 'none';
         }
         
         function showCopyNotification(text) {
